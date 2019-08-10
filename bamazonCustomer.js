@@ -48,15 +48,13 @@ function loadItemArray() {
                 ea.item_id
             );
         })
-//display the items returned
+//display the items in the database
         displayItems();
     });
 }
 
 //display the items available for sale
 function displayItems() {
- //   console.log("Available Items")
- //console.table(['name', 'age'], values);
     console.table("Available Items",response);
     processInput();
 }
@@ -100,6 +98,7 @@ function processInput() {
 
 }
 
+//validate the item and add to purchases array
 function processItem(item, quantity) {
     //see if the item ID is valid
 
@@ -169,8 +168,5 @@ function updateInventory(itemID, purchaseQty) {
 
 //this will display the items purchased, and the total amount
 function displayOrder() {
-    //console.log(`Your order total is: $ ${orderTotal}`)
     console.table(`Your order`,purchases,`Your order total is: $ ${orderTotal}`);
-   // console.log(`Your order total is: $ ${orderTotal}`)
-
 }
