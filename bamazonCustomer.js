@@ -33,7 +33,6 @@ connection.connect(function (err) {
 function loadItemArray() {
 
     connection.query("SELECT * FROM products", function (err, res) {
-        //console.log(err);
         if (err) throw err;
 
         res.forEach(function (ea) {
@@ -139,7 +138,6 @@ function processOrder() {
         purchases[i].stock_quantity = newQuantity;
         updateInventory(purchases[i].id, newQuantity);
     }
-    //console.log(purchases);
     displayOrder();
     connection.end();
     return;
@@ -148,7 +146,6 @@ function processOrder() {
 
 //once the item has been validated, update the inventory
 function updateInventory(itemID, purchaseQty) {
-    //console.log(`updateinventory id ${itemID}  qty ${purchaseQty}`)
     connection.query(
         "UPDATE products SET ? WHERE ?",
         [

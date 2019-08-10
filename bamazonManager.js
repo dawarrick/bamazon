@@ -12,8 +12,7 @@ var mysqlPassword = keys.mysql;
 var results = [];
 var response = [];
 var inventory = [];
-var orderTotal = 0;
-var crlf = '\r\n';
+var departments = [];
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -25,11 +24,28 @@ var connection = mysql.createConnection({
 
 connection.connect(function (err) {
     if (err) throw err;
-    //console.log("connected as id " + connection.threadId + "\n");
+    loadDepartments();
     menuOptions();
 });
 
+//departments for adding a new item
+function loadDepartments() {
+    console.clear();
+
+    var query = "SELECT department_name FROM departments ORDER BY department_name";
+    connection.query(query, function (err, res) {
+        if (err) throw err;
+
+        res.forEach(function (ea) {
+            departments.push(
+                ea.department_name
+            );
+        })
+    });
+}
+
 //load the items from the database into an array for processing.
+//limit - 0 means load and display all. -1 means load all and display and return to calling program, any ohter number means show those with qty < limit.
 function loadItemArray(limit) {
     console.clear();
     results = [];
@@ -39,9 +55,9 @@ function loadItemArray(limit) {
     if (limit > 0) {
         query += ` WHERE stock_quantity < ${limit}`;
     }
-    //   console.log(query)
+    
     connection.query(query, function (err, res) {
-        //console.log(err);
+      
         if (err) throw err;
 
         res.forEach(function (ea) {
@@ -58,12 +74,18 @@ function loadItemArray(limit) {
         })
         //if no results
         if (results.length === 0) {
-            console.log("There is no inventory with less than 5 items in stock.")
-            menuOptions();
+            console.log("There is no inventory that meets your criteria.")
         }
         else {
-            //display the items in the database
             displayItems(limit);
+        }
+        if (limit === -1) {
+            //go back to the calling program
+            return;
+        }
+        else {
+            //go back to the menu
+            menuOptions()
         }
     });
 }
@@ -76,12 +98,7 @@ function displayItems(limit) {
     else {
         console.table("Available Items", response);
     }
-    if (limit === -1) {
-        return;
-    }
-    else {
-        menuOptions();
-    }
+    return;
 }
 
 //will validate what was passed in, and optionally prompt the user if they passed in crap
@@ -116,10 +133,12 @@ function menuOptions() {
         }
         else if (input.doingWhat === "Add to Inventory") {
             inventory = [];
+            //display the current inventory
+            loadItemArray(-1);
             increaseInventory();
         }
         else if (input.doingWhat === "Add New Product") {
-            command = "movie-this"
+            addProduct();
         }
         //quit
         else {
@@ -128,8 +147,6 @@ function menuOptions() {
     });
 
 }
-
-
 
 //will prompt for items to add quantity
 function increaseInventory() {
@@ -153,12 +170,13 @@ function increaseInventory() {
 
     ]).then(function (input) {
         //they've added something to the order and pressed enter.
-        if (input.itemID === "" && purchases.length > 0) {
+        if (input.itemID === "" && inventory.length > 0) {
             processUpdates();
         }
         //quit
-        else if ((input.itemID.toUpperCase() === "Q" || input.itemID === "") && purchases.length === 0) {
-            process.exit(1);
+        else if ((input.itemID.toUpperCase() === "Q" || input.itemID === "") && inventory.length === 0) {
+            //process.exit(1);
+            return;
         }
         //validate the input and process.
         else {
@@ -180,41 +198,36 @@ function updateItem(item, quantity) {
         console.log("Please Enter a valid Item ID");
     }
     else {
-        //let's add the items to an array.  two decimals
-        var item_total = (quantity * parseFloat(response[index].price));
+        //let's add the items to an array.
         inventory.push({
             id: item,
             quantity: quantity,
+            stock_quantity: response[index].quantityInStock
         });
     }
     increaseInventory();
 }
 
-//after they're done entering the order, update the inventory and display the order.
+//after they're done entering the items to update, update the inventory and display.
 function processUpdates() {
     // update quantity remaining after order
 
-    for (var i = 0; i < purchases.length; i++) {
-        var newQuantity = parseInt(purchases[i].stock_quantity) - parseInt(purchases[i].quantity);
-        //update the stock inventory array
-        purchases[i].stock_quantity = newQuantity;
-        updateInventory(purchases[i].id, newQuantity);
+    for (var i = 0; i < inventory.length; i++) {
+        //compute the new quantity in stock
+        var newQty = parseInt(inventory[i].quantity) + parseInt(inventory[i].stock_quantity);
+        updateInventory(inventory[i].id, newQty);
     }
-    //console.log(purchases);
-    displayOrder();
-    connection.end();
-    return;
-
+    //display current inventory and menu
+    loadItemArray(0);
 }
 
 //once the item has been validated, update the inventory
-function updateInventory(itemID, purchaseQty) {
-    //console.log(`updateinventory id ${itemID}  qty ${purchaseQty}`)
+function updateInventory(itemID, newQty) {
     connection.query(
         "UPDATE products SET ? WHERE ?",
         [
             {
-                stock_quantity: stock_quantity + purchaseQty
+                stock_quantity: newQty
             },
             {
                 item_id: itemID
@@ -225,10 +238,67 @@ function updateInventory(itemID, purchaseQty) {
 
         }
     );
-    loadItemArray(0);
 }
 
-//this will display the items purchased, and the total amount
-function displayOrder() {
-    console.table(`Your order`, purchases, `Your order total is: $ ${orderTotal}`);
+//these functions are for adding a new item
+//will prompt for product name, department, price, quantity
+function addProduct() {
+
+    inquirer.prompt([
+
+        {
+            type: "input",
+            name: "name",
+            message: "Product Name"
+        },
+
+        {
+            type: "list",
+            name: "department",
+            message: "Select Department",
+            choices: departments
+        },
+
+        {
+            type: "input",
+            name: "price",
+            message: "Price"
+        },
+
+        {
+            type: "input",
+            name: "qty",
+            message: "Quantity in Stock"
+        },
+    ]).then(function (input) {
+        //they've added something to the order and pressed enter.
+        //make sure valid entry
+        if (input.name === "" || input.department === "" || parseFloat(input.price) < .01 || parseInt(input.qty) < 0) {
+            console.log("All data fields are required");
+            
+        }
+        else {
+            addToDB(input.name, input.department, parseFloat(input.price), parseInt(input.qty));
+        }
+        menuOptions();
+    });
+
+}
+
+//once the item has been validated, update the inventory
+function addToDB(name, department, price, quantity) {
+    connection.query(
+        "INSERT INTO products SET ?",
+            {
+                product_name: name,
+                department_name: department,
+                price: price,                            
+                stock_quantity: quantity
+            },
+        function (err, res) {
+            if (err) throw err;
+
+        }
+    );
+    loadItemArray(0);
 }
