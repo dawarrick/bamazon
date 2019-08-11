@@ -5,9 +5,9 @@
 * bamazon is a Node.js programs incorporating MySQL to store the data and Inquirer to provide a user interface
 * bamazon can't be run from a URL, it must be executed using Node.js.
 
-##  ** bamazonCustomer.js ** - Customers can buy your items throught this CLI interface  
-## ** bamazonManager.js ** - Manage your inventory:  view products for sale, see those below inventory thresholds (5), add stock quantity to inventory, add a new product.  
-## ** bamazonSupervisor.js **- will allow you to run a net profit report, and add a new department.  
+## bamazonCustomer.js - Customers can buy your items throught this CLI interface  
+## bamazonManager.js - Manage your inventory:  view products for sale, see those below inventory thresholds (5), add stock quantity to inventory, add a new product.  
+## bamazonSupervisor.js - will allow you to run a net profit report, and add a new department.  
 
 
 ## How it works
@@ -36,7 +36,7 @@ You will be given a menu to select from.  Use the up and down arrows to navigate
 
 
 ##### Watch it in action.
-![](bamazonManager.gif)
+![](videos\bamazonManager.gif)
 
 
 
@@ -55,8 +55,8 @@ You will be given a menu to select from.  Use the up and down arrows to navigate
 
 **MySQL** - to allow for the interaction with the MySQL database.  
 **inquirer** - to allow for the prompts for the execution.  
-**keys** - the MySQL password is stored in a .env file to protect it.  
-**dotenv** - used to protect my password
+**keys** - the MySQL password is stored in a .env file to protect it.    
+**dotenv** - used to protect my password.
 **console.table** - to prettify the Node output.
 
 You must have a MySQL installation and valid MySQL credentials loaded into a .env file in order to run it.
