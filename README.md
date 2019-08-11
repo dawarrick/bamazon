@@ -5,9 +5,9 @@
 * bamazon is a Node.js programs incorporating MySQL to store the data and Inquirer to provide a user interface
 * bamazon can't be run from a URL, it must be executed using Node.js.
 
-### ** bamazonCustomer.js - Customers can buy your items throught this CLI interface
-### ** bamazonManager.js - Manage your inventory:  view products for sale, see those below inventory thresholds (5), add stock quantity to inventory, add a new product.
-### ** bamazonSupervisor.js - will allow you to run a net profit report, and add a new department.
+##  ** bamazonCustomer.js ** - Customers can buy your items throught this CLI interface  
+## ** bamazonManager.js ** - Manage your inventory:  view products for sale, see those below inventory thresholds (5), add stock quantity to inventory, add a new product.  
+## ** bamazonSupervisor.js **- will allow you to run a net profit report, and add a new department.  
 
 
 ## How it works
@@ -22,14 +22,14 @@
 * You will be given an order total at the end.
   
 ##### Watch it in action.
-![](bamazonCustomer.gif)
+![](videos/bamazonCustomer.gif)
 
 
 ### NODE bamazonManager
 
 You will be given a menu to select from.  Use the up and down arrows to navigate through.
 
-* View Products for Sale - will display our current inventory
+* View Products for Sale - will display our current inventory 
 * View Low Inventory - will list the item with a in-stock inventory of less than 5 so you know when to reorder.
 * Add to Inventory - will allow you to log the receipt of additional quantity of existing items into inventory.  Enter multiple items, and  then press enter to complete.
 * Add New Product - will allow you to add a new product to our inventory.  You must select a valid department from the list.
