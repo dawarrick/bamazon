@@ -147,7 +147,7 @@ function increaseInventory() {
         {
             type: "input",
             name: "itemID",
-            message: "Enter the ID of the item to increment quantity, <enter> to complete order or Q to quit."
+            message: "Enter the ID of the item to increment quantity, <enter> to complete or Q to quit."
         },
         {
             //only prompt for the quantity if they selected an item
