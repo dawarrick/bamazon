@@ -1,0 +1,26 @@
+{
+  "name": "bamazon",
+  "version": "1.0.0",
+  "description": "* bamazon is an example of using MySQL, in conjunction with NODE and inquirer to provide a user interface * bamazon can't be run from a URL, it must be executed using Node.js.",
+  "main": "bamazonCustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dawarrick/bamazon.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dawarrick/bamazon/issues"
+  },
+  "homepage": "https://github.com/dawarrick/bamazon#readme",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "dotenv": "^8.0.0",
+    "inquirer": "^6.5.1",
+    "keys": "^0.1.2",
+    "mysql": "^2.17.1"
+  }
+}

@@ -40,8 +40,7 @@ function loadDepartments() {
     });
 }
 
-//load the items from the database into an array for processing.
-//limit - 0 means load and display all. -1 means load all and display and return to calling program, any ohter number means show those with qty < limit.
+//summary report of profits by department
 function viewProductSales() {
     console.clear();
     results = [];
@@ -86,12 +85,11 @@ function menuOptions() {
             process.exit(1);
         }
     });
-
 }
 
 
-//these functions are for adding a new item
-//will prompt for product name, department, price, quantity
+//these functions are for adding a new department
+//will prompt for department name and overhead costs for the department
 function createDepartment() {
 
     inquirer.prompt([

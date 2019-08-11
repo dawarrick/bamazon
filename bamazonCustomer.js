@@ -25,7 +25,6 @@ var connection = mysql.createConnection({
 
 connection.connect(function (err) {
     if (err) throw err;
-    //console.log("connected as id " + connection.threadId + "\n");
     loadItemArray();
 });
 
@@ -47,14 +46,14 @@ function loadItemArray() {
                 ea.item_id
             );
         })
-//display the items in the database
+        //display the items in the database
         displayItems();
     });
 }
 
 //display the items available for sale
 function displayItems() {
-    console.table("Available Items",response);
+    console.table("Available Items", response);
     processInput();
 }
 
@@ -63,7 +62,7 @@ function displayItems() {
 //will prompt for order information
 function processInput() {
 
- //prompt for the item ID
+    //prompt for the item ID
     inquirer.prompt([
         {
             type: "input",
@@ -82,11 +81,11 @@ function processInput() {
 
     ]).then(function (input) {
         //they've added something to the order and pressed enter.
-        if (input.itemID ==="" && purchases.length > 0) {
+        if (input.itemID === "" && purchases.length > 0) {
             processOrder();
         }
         //quit
-        else if ((input.itemID.toUpperCase() === "Q" || input.itemID ==="") && purchases.length === 0) {
+        else if ((input.itemID.toUpperCase() === "Q" || input.itemID === "") && purchases.length === 0) {
             process.exit(1);
         }
         //validate the input and process.
@@ -94,7 +93,6 @@ function processInput() {
             processItem(parseInt(input.itemID), parseInt(input.quantity));
         }
     });
-
 }
 
 //validate the item and add to purchases array
@@ -102,8 +100,9 @@ function processItem(item, quantity) {
     //see if the item ID is valid
 
     let index = results.indexOf(item);
-    if (quantity < 0) {
-    console.log("Please Enter a valid quantity");
+    //make sure a valid number
+    if (Number.isNaN(quantity) || parseInt(quantity) < 0) {
+        console.log("Please Enter a valid quantity");
     }
     else if (index < 0) {
         console.log("Please Enter a valid Item ID");
@@ -136,7 +135,7 @@ function processOrder() {
         var newQuantity = parseInt(purchases[i].stock_quantity) - parseInt(purchases[i].quantity);
         //update the stock inventory array
         purchases[i].stock_quantity = newQuantity;
-        updateInventory(purchases[i].id, newQuantity);
+        updateInventory(purchases[i].id, newQuantity, i);
     }
     displayOrder();
     connection.end();
@@ -145,13 +144,10 @@ function processOrder() {
 }
 
 //once the item has been validated, update the inventory
-function updateInventory(itemID, purchaseQty) {
+function updateInventory(itemID, purchaseQty, i) {
     connection.query(
-        "UPDATE products SET ? WHERE ?",
+        `UPDATE products SET stock_quantity = ${purchaseQty}, product_sales = product_sales+(${purchases[i].item_total}) WHERE ?`,
         [
-            {
-                stock_quantity: purchaseQty
-            },
             {
                 item_id: itemID
             }
@@ -165,5 +161,5 @@ function updateInventory(itemID, purchaseQty) {
 
 //this will display the items purchased, and the total amount
 function displayOrder() {
-    console.table(`Your order`,purchases,`Your order total is: $ ${orderTotal}`);
+    console.table(`Your order`, purchases, `Your order total is: $ ${orderTotal}`);
 }

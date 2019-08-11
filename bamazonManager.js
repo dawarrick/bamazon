@@ -45,7 +45,7 @@ function loadDepartments() {
 }
 
 //load the items from the database into an array for processing.
-//limit - 0 means load and display all. -1 means load all and display and return to calling program, any ohter number means show those with qty < limit.
+//limit - 0 means load and display all. -1 means load all and display, and prompt for inventory changes, any other number means show those with qty < limit.
 function loadItemArray(limit) {
     console.clear();
     results = [];
@@ -80,8 +80,8 @@ function loadItemArray(limit) {
             displayItems(limit);
         }
         if (limit === -1) {
-            //go back to the calling program
-            return;
+            //prompt for updates to inventory
+            increaseInventory();
         }
         else {
             //go back to the menu
@@ -112,15 +112,6 @@ function menuOptions() {
             message: "Select what you would like to do",
             choices: ["View Products for Sale", "View Low Inventory", "Add to Inventory", "Add New Product", "Quit"]
         },
-        /*    {
-                //only prompt for the search if one of the first three options selected
-                when: function (response) {
-                    return (response.doingWhat !== "Pick for me" && response.doingWhat !== "Quit");
-                },
-                type: "input",
-                name: "searchValue",
-                message: "What would you like to search for?"
-            }*/
     ]).then(function (input) {
 
         //get a random selection from those previously
@@ -135,7 +126,7 @@ function menuOptions() {
             inventory = [];
             //display the current inventory
             loadItemArray(-1);
-            increaseInventory();
+            
         }
         else if (input.doingWhat === "Add New Product") {
             addProduct();
