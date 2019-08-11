@@ -4,12 +4,12 @@
 
 #### Developed by Deb Warrick https://debwarrick.com
 
-* bamazon is a Node.js programs incorporating MySQL to store the inventory, with Inquirer to provide a user interface.
+* bamazon is a Node.js program incorporating MySQL to store the inventory, with Inquirer to provide a user interface.
 * bamazon can't be run from a URL, it must be executed using Node.js.
 
-## bamazonCustomer.js - Customers can buy your items through this CLI interface.  
-## bamazonManager.js - Manage your inventory: view products for sale, see those below inventory thresholds (5), add stock quantity to inventory, add a new product.  
-## bamazonSupervisor.js - will allow you to run a net profit report, and add a new department.  
+**bamazonCustomer.js** - Customers can buy your items through this CLI interface.  
+**bamazonManager.js** - Manage your inventory: view products for sale, see those below inventory thresholds (5), add stock quantity to inventory, add a new product.  
+**bamazonSupervisor.js** - will allow you to run a net profit report, and add a new department.  
 
 
 ## How it works
