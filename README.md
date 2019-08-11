@@ -22,7 +22,7 @@
 * You will be given an order total at the end.
   
 ##### Watch it in action.
-![](videos/bamazonCustomer.gif)
+![](bamazon/videos/bamazonCustomer.gif)
 
 
 ### NODE bamazonManager
