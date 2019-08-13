@@ -58,8 +58,8 @@ You will be given a menu to select from.  Use the up and down arrows to navigate
 
 **MySQL** - to allow for the interaction with the MySQL database.  
 **inquirer** - to allow for the prompts for the execution.  
-**keys** - the MySQL password is stored in a .env file to protect it.    
-**dotenv** - used to protect my password.
+**keys** - the MySQL password is stored in a .env file to protect it.     
+**dotenv** - used to protect my password.  
 **console.table** - to prettify the Node output.
 
 You must have a MySQL installation and valid MySQL credentials loaded into a .env file in order to run it.
